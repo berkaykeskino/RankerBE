@@ -1,4 +1,4 @@
-package com.berkay.ranker.user.controller.Request;
+package com.berkay.ranker.user.controller.request;
 
 import com.berkay.ranker.user.data.dto.UserDTO;
 import lombok.Getter;

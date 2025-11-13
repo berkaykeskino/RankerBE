@@ -1,7 +1,7 @@
 package com.berkay.ranker.user.controller;
 
-import com.berkay.ranker.user.controller.Request.CreateUserRequest;
-import com.berkay.ranker.user.controller.Response.UserResponse;
+import com.berkay.ranker.user.controller.request.CreateUserRequest;
+import com.berkay.ranker.user.controller.response.UserResponse;
 import com.berkay.ranker.user.data.dto.UserDTO;
 import com.berkay.ranker.user.service.UserService;
 import org.junit.jupiter.api.Test;

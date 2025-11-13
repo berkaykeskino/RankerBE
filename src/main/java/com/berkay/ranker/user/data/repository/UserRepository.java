@@ -4,5 +4,6 @@ import com.berkay.ranker.user.data.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    boolean existsByUsername(String userName);
+    boolean existsByUsername(String username);
+    User findByUsername(String username);
 }
