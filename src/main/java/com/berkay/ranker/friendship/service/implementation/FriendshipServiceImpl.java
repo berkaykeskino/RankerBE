@@ -1,5 +1,6 @@
 package com.berkay.ranker.friendship.service.implementation;
 
+import com.berkay.ranker.common.exceptionHandling.customExceptions.ResourceNotFoundException;
 import com.berkay.ranker.friendship.data.dto.FriendshipDTO;
 import com.berkay.ranker.friendship.data.entity.Friendship;
 import com.berkay.ranker.friendship.data.mapper.FriendshipMapper;
@@ -19,9 +20,9 @@ public class FriendshipServiceImpl implements FriendshipService {
     @Override
     public FriendshipDTO sendFriendship(Long senderId, Long receiverId){
         userRepository.findById(senderId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: "+ senderId));
+                .orElseThrow(() -> new ResourceNotFoundException("user.not.found", senderId));
         userRepository.findById(receiverId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: "+ receiverId));
+                .orElseThrow(() -> new ResourceNotFoundException("user.not.found", receiverId));
         Friendship friendship = mapper.toFriendship(createSendFriendshipDTO(senderId, receiverId));
         Friendship savedFriendship = repository.save(friendship);
         return mapper.toFriendshipDTO(savedFriendship);

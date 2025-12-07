@@ -1,5 +1,6 @@
 package com.berkay.ranker.post.service.implementation;
 
+import com.berkay.ranker.common.exceptionHandling.customExceptions.ResourceNotFoundException;
 import com.berkay.ranker.post.data.dto.PostDTO;
 import com.berkay.ranker.post.data.entity.Post;
 import com.berkay.ranker.post.data.mapper.PostMapper;
@@ -20,7 +21,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDTO createPost(PostDTO postDTO){
         User user = userRepository.findById(postDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found with id: "+ postDTO.getUserId()));
+                .orElseThrow(() -> new ResourceNotFoundException("user.not.found", postDTO.getUserId()));
         Post post = postMapper.toPost(postDTO);
         post.setUser(user);
         Post savedPost = postRepository.save(post);

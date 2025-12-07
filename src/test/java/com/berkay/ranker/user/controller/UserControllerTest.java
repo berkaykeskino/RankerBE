@@ -1,5 +1,6 @@
 package com.berkay.ranker.user.controller;
 
+import com.berkay.ranker.common.exceptionHandling.customExceptions.DuplicateResourceException;
 import com.berkay.ranker.user.controller.request.CreateUserRequest;
 import com.berkay.ranker.user.controller.response.UserResponse;
 import com.berkay.ranker.user.data.dto.UserDTO;
@@ -24,9 +25,9 @@ public class UserControllerTest {
 
     @Test
     void createUser_GivenExistingUser_ThrowsException(){
-        when(userService.createUser(any())).thenThrow(new RuntimeException("Username already exists: "+ "1"));
-        Exception exception = assertThrows(RuntimeException.class, () -> userController.createUser(new CreateUserRequest()));
-        assertEquals("Username already exists: "+ "1", exception.getMessage());
+        when(userService.createUser(any())).thenThrow(new DuplicateResourceException("User already exists with username: "+ "1"));
+        Exception exception = assertThrows(DuplicateResourceException.class, () -> userController.createUser(new CreateUserRequest()));
+        assertEquals("User already exists with username: "+ "1", exception.getMessage());
     }
 
     @Test
