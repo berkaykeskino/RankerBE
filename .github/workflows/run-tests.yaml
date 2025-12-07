@@ -10,6 +10,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: test
+          MYSQL_DATABASE: ranker_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
     steps:
       - uses: actions/checkout@v3
 
@@ -19,5 +33,14 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build and run tests
-        run: mvn clean verify
+      - name: Wait for MySQL to be ready
+        run: |
+          echo "Waiting for MySQL..."
+          for i in {1..30}; do
+            nc -z localhost 3306 && echo "MySQL is up!" && break
+            echo "MySQL not ready yet..."
+            sleep 2
+          done
+
+      - name: Build and Test with Coverage
+        run: mvn clean verify -Dspring.profiles.active=test
