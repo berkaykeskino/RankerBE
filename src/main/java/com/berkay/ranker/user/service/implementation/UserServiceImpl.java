@@ -1,5 +1,7 @@
 package com.berkay.ranker.user.service.implementation;
 
+import com.berkay.ranker.common.exceptionHandling.customExceptions.DuplicateResourceException;
+import com.berkay.ranker.common.exceptionHandling.customExceptions.ResourceNotFoundException;
 import com.berkay.ranker.friendship.data.dto.FriendshipDTO;
 import com.berkay.ranker.friendship.data.mapper.FriendshipMapper;
 import com.berkay.ranker.post.data.dto.PostDTO;
@@ -26,7 +28,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO createUser(UserDTO userDTO){
         UserDTO savedUserDTO;
         if (userRepository.existsByUsername(userDTO.getUsername())){
-            throw new RuntimeException("Username already exists: "+ userDTO.getUsername());
+            throw new DuplicateResourceException("user.username.already.exists", userDTO.getUsername());
         }else{
             User savedUser = userRepository.save(userMapper.toUser(userDTO));
             savedUserDTO = userMapper.toUserDTO(savedUser);
@@ -46,7 +48,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<FriendshipDTO> getPendingRequests(Long userId){
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: "+ userId))
+                .orElseThrow(() -> new ResourceNotFoundException("user.not.found", userId))
                 .getReceivedFriendships()
                 .stream()
                 .map(friendshipMapper::toFriendshipDTO)
