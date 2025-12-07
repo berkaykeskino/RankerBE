@@ -1,5 +1,6 @@
 package com.berkay.ranker.user.data.entity;
 
+import com.berkay.ranker.friendship.data.entity.Friendship;
 import com.berkay.ranker.post.data.entity.Post;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -32,4 +33,10 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sender")
+    private List<Friendship> sentFriendships = new ArrayList<>();
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Friendship> receivedFriendships = new ArrayList<>();
 }
