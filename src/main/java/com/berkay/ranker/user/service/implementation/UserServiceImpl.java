@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("user.not.found", userId))
                 .getReceivedFriendships()
                 .stream()
+                .filter(friendship -> !friendship.isReplied())
                 .map(friendshipMapper::toFriendshipDTO)
                 .toList();
     }
