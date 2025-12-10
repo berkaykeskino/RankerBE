@@ -109,7 +109,13 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.11</version>
-
+				<configuration>
+					<excludes>
+						<exclude>**/data/dto/**</exclude>
+						<exclude>**/data/entity/**</exclude>
+						<exclude>**/data/mapper/**</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<!-- Attach coverage agent -->
 					<execution>
