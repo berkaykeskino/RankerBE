@@ -1,15 +1,23 @@
 package com.berkay.ranker.user.controller;
 
 import com.berkay.ranker.common.exceptionHandling.customExceptions.DuplicateResourceException;
+import com.berkay.ranker.friendship.data.dto.FriendshipDTO;
+import com.berkay.ranker.post.data.dto.PostDTO;
 import com.berkay.ranker.user.controller.request.CreateUserRequest;
+import com.berkay.ranker.user.controller.response.AllPostsResponse;
+import com.berkay.ranker.user.controller.response.PendingFriendshipRequestsResponse;
 import com.berkay.ranker.user.controller.response.UserResponse;
 import com.berkay.ranker.user.data.dto.UserDTO;
 import com.berkay.ranker.user.service.UserService;
+import com.berkay.ranker.util.FriendshipTestUtil;
+import com.berkay.ranker.util.PostTestUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -17,7 +25,7 @@ import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-public class UserControllerTest {
+class UserControllerTest {
     @InjectMocks
     private UserController userController;
     @Mock
@@ -45,5 +53,23 @@ public class UserControllerTest {
         when(userService.createUser(userDTO)).thenReturn(savedUser);
         UserResponse response = userController.createUser(createUserRequest);
         assertEquals(1L, response.getUserDTO().getId());
+    }
+
+    @Test
+    void getAllPosts_ReturnsAllPostsResponse(){
+        PostDTO postDTO1 = PostTestUtil.getPostDTO(1L, 1L);
+        PostDTO postDTO2 = PostTestUtil.getPostDTO(2L, 1L);
+        when(userService.getAllPosts(any())).thenReturn(List.of(postDTO1, postDTO2));
+        AllPostsResponse response = userController.getAllPosts("userName");
+        assertEquals(2, response.getAllPosts().size());
+    }
+
+    @Test
+    void getPendingRequests_ReturnsPendingFriendshipRequestsResponse(){
+        FriendshipDTO friendshipDTO1 = FriendshipTestUtil.getFriendshipDTO(1L, 0L);
+        FriendshipDTO friendshipDTO2 = FriendshipTestUtil.getFriendshipDTO(2L, 0L);
+        when(userService.getPendingRequests(any())).thenReturn(List.of(friendshipDTO1, friendshipDTO2));
+        PendingFriendshipRequestsResponse response = userController.getPendingRequests(0L);
+        assertEquals(2, response.getFriendshipDTOList().size());
     }
 }
