@@ -3,6 +3,7 @@ package com.berkay.ranker.user.data.entity;
 import com.berkay.ranker.friendship.data.entity.Friendship;
 import com.berkay.ranker.likeEvent.data.entity.LikeEvent;
 import com.berkay.ranker.post.data.entity.Post;
+import com.berkay.ranker.rankEvent.data.entity.RankEvent;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
@@ -43,4 +44,10 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<LikeEvent> likeEvents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "actor")
+    private List<RankEvent> actorInRanks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "subject")
+    private List<RankEvent> subjectInRanks = new ArrayList<>();
 }
