@@ -37,6 +37,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO getUser(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("user.not.found", userId));
+        return userMapper.toUserDTO(user);
+    }
+
+    @Override
     public List<PostDTO> getAllPosts(String username){
         return userRepository.findByUsername(username)
                 .getPosts()

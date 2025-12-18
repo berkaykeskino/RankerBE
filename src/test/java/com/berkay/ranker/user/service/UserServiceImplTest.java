@@ -108,4 +108,21 @@ class UserServiceImplTest {
         assertEquals(1L, friendshipDTOList.get(0).getId());
     }
 
+    @Test
+    void getUser_ReturnsUserDTO(){
+        Long userId = 1L;
+        User user = UserTestUtil.getUser(userId);
+        UserDTO userDTO = UserTestUtil.getUserDTO(userId);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+        UserDTO response = userServiceImpl.getUser(userId);
+        assertEquals(userId, response.getId());
+    }
+
+    @Test
+    void  getUser_ThrowsException(){
+        when(userRepository.findById(any())).thenReturn(Optional.empty());
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> userServiceImpl.getUser(1L));
+        assertEquals("user.not.found", exception.getMessage());
+    }
 }

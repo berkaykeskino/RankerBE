@@ -3,14 +3,12 @@ package com.berkay.ranker.rankEvent.controller;
 
 import com.berkay.ranker.rankEvent.controller.request.CreateExternalRankRequest;
 import com.berkay.ranker.rankEvent.controller.response.CreateExternalRankResponse;
+import com.berkay.ranker.rankEvent.controller.response.RankingTypeResponse;
 import com.berkay.ranker.rankEvent.service.RankingTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,4 +23,9 @@ public class RankingTypeController {
         return new CreateExternalRankResponse(service.createExternalRank(request.getRankingTypeDTO()));
     }
 
+    @GetMapping("/{rankingTypeId}")
+    @Operation(summary = "Get ranking type with the given id")
+    public RankingTypeResponse getRankingType(@PathVariable("rankingTypeId") Long rankingTypeId){
+        return new RankingTypeResponse(service.getRankingType(rankingTypeId));
+    }
 }

@@ -26,4 +26,11 @@ class RankingTypeControllerTest {
         controller.createExternalRank(new CreateExternalRankRequest());
         verify(service).createExternalRank(any());
     }
+
+    @Test
+    void getRankingType_callsService(){
+        when(service.getRankingType(any())).thenReturn(new RankingTypeDTO());
+        controller.getRankingType(1L);
+        verify(service).getRankingType(any());
+    }
 }
