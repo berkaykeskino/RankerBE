@@ -11,6 +11,7 @@ import com.berkay.ranker.user.data.dto.UserDTO;
 import com.berkay.ranker.user.service.UserService;
 import com.berkay.ranker.util.FriendshipTestUtil;
 import com.berkay.ranker.util.PostTestUtil;
+import com.berkay.ranker.util.UserTestUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -71,5 +72,14 @@ class UserControllerTest {
         when(userService.getPendingRequests(any())).thenReturn(List.of(friendshipDTO1, friendshipDTO2));
         PendingFriendshipRequestsResponse response = userController.getPendingRequests(0L);
         assertEquals(2, response.getFriendshipDTOList().size());
+    }
+
+    @Test
+    void getUser_ReturnsUserResponse(){
+        Long userId = 1L;
+        UserDTO userDTO = UserTestUtil.getUserDTO(userId);
+        when(userService.getUser(userId)).thenReturn(userDTO);
+        UserResponse response = userController.getUser(userId);
+        assertEquals(userId, response.getUserDTO().getId());
     }
 }
