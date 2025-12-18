@@ -27,6 +27,12 @@ public class UserController {
         return new UserResponse(userService.createUser(createUserRequest.getUserDTO()));
     }
 
+    @GetMapping("/{userId}")
+    @Operation(summary = "Get user by id")
+    public UserResponse getUser(@PathVariable("userId") Long userId){
+        return new UserResponse(userService.getUser(userId));
+    }
+
     @GetMapping("/post/{username}")
     @Operation(summary = "Get all posts of the user with the given user name")
     public AllPostsResponse getAllPosts(@PathVariable("username") String username){

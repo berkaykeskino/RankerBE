@@ -9,6 +9,8 @@ import java.util.List;
 public interface UserService {
     UserDTO createUser(UserDTO userDTO);
 
+    UserDTO getUser(Long userId);
+
     List<PostDTO> getAllPosts(String username);
 
     List<FriendshipDTO> getPendingRequests(Long userId);
