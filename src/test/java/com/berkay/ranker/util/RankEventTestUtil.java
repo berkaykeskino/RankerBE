@@ -14,8 +14,11 @@ public class RankEventTestUtil {
         return rankEventDTO;
     }
 
-    public static RankEvent getRankEvent(User actor, User subject, RankingType rankingType){
+    public static RankEvent getRankEvent(Long actorId, Long subjectId, Long rankingTypeId){
         RankEvent rankEvent = new RankEvent();
+        User actor = UserTestUtil.getUser(actorId);
+        User subject = UserTestUtil.getUser(subjectId);
+        RankingType rankingType = RankingTypeTestUtil.getRankingType(rankingTypeId);
         rankEvent.setActor(actor);
         rankEvent.setSubject(subject);
         rankEvent.setRankingType(rankingType);
