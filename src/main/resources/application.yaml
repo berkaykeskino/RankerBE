@@ -2,16 +2,18 @@ spring:
   application:
     name: ranker
   datasource:
-    url: jdbc:mysql://localhost:3306/ranker
-    username: root
-    password: root
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/ranker}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+
 jwt:
-  secretKey: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437 # must be a 64 character long random string
+  secretKey: ${JWT_SECRET:5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437}
   expirationTime: 36000000
   tokenHeader: X-Auth-Token
