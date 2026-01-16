@@ -7,11 +7,14 @@ import com.berkay.ranker.friendship.data.mapper.FriendshipMapper;
 import com.berkay.ranker.post.data.dto.PostDTO;
 import com.berkay.ranker.post.data.mapper.PostMapper;
 import com.berkay.ranker.user.data.dto.UserDTO;
+import com.berkay.ranker.user.data.entity.Role;
 import com.berkay.ranker.user.data.entity.User;
 import com.berkay.ranker.user.data.mapper.UserMapper;
+import com.berkay.ranker.user.data.repository.RoleRepository;
 import com.berkay.ranker.user.data.repository.UserRepository;
 import com.berkay.ranker.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +26,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PostMapper postMapper;
     private final FriendshipMapper friendshipMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     public UserDTO createUser(UserDTO userDTO){
@@ -30,7 +35,12 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByUsername(userDTO.getUsername())){
             throw new DuplicateResourceException("user.username.already.exists", userDTO.getUsername());
         }else{
-            User savedUser = userRepository.save(userMapper.toUser(userDTO));
+            User user = userMapper.toUser(userDTO);
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            Role defaultRole = roleRepository.findById(1L)
+                    .orElseThrow(() -> new ResourceNotFoundException("Default Role (ID: 1) not found in database"));
+            user.setRole(defaultRole);
+            User savedUser = userRepository.save(user);
             savedUserDTO = userMapper.toUserDTO(savedUser);
         }
         return savedUserDTO;
@@ -61,5 +71,15 @@ public class UserServiceImpl implements UserService {
                 .filter(friendship -> !friendship.isReplied())
                 .map(friendshipMapper::toFriendshipDTO)
                 .toList();
+    }
+
+    @Override
+    public User findByUsername(String username){
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User save(final User user){
+        return userRepository.save(user);
     }
 }
