@@ -9,8 +9,10 @@ import com.berkay.ranker.post.data.dto.PostDTO;
 import com.berkay.ranker.post.data.entity.Post;
 import com.berkay.ranker.post.data.mapper.PostMapper;
 import com.berkay.ranker.user.data.dto.UserDTO;
+import com.berkay.ranker.user.data.entity.Role;
 import com.berkay.ranker.user.data.entity.User;
 import com.berkay.ranker.user.data.mapper.UserMapper;
+import com.berkay.ranker.user.data.repository.RoleRepository;
 import com.berkay.ranker.user.data.repository.UserRepository;
 import com.berkay.ranker.user.service.implementation.UserServiceImpl;
 import com.berkay.ranker.util.FriendshipTestUtil;
@@ -21,6 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +45,10 @@ class UserServiceImplTest {
     private PostMapper postMapper;
     @Mock
     private FriendshipMapper friendshipMapper;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+    @Mock
+    private RoleRepository roleRepository;
 
     @Test
     void createUser_ThrowsDuplicateResourceException_WhenUsernameExists(){
@@ -59,6 +66,8 @@ class UserServiceImplTest {
         when(userMapper.toUser(userDTO)).thenReturn(user);
         when(userRepository.save(user)).thenReturn(user);
         when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+        when(passwordEncoder.encode(any())).thenReturn("password");
+        when(roleRepository.findById(1L)).thenReturn(Optional.of(new Role()));
         UserDTO response = userServiceImpl.createUser(userDTO);
         assertEquals("username1", response.getUsername());
     }
