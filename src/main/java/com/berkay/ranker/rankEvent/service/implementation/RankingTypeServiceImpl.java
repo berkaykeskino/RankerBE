@@ -9,6 +9,8 @@ import com.berkay.ranker.rankEvent.service.RankingTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RankingTypeServiceImpl implements RankingTypeService {
@@ -28,5 +30,12 @@ public class RankingTypeServiceImpl implements RankingTypeService {
         RankingType rankingType = repository.findById(rankingTypeId)
                 .orElseThrow(() -> new ResourceNotFoundException("ranking-type.not.found", rankingTypeId));
         return mapper.toRankingTypeDTO(rankingType);
+    }
+
+    @Override
+    public List<RankingTypeDTO> getAllRankingTypes(){
+        return repository.findAll().stream()
+                .map(mapper::toRankingTypeDTO)
+                .toList();
     }
 }
