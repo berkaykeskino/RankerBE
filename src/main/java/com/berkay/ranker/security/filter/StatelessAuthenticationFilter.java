@@ -30,4 +30,15 @@ public class StatelessAuthenticationFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        String method = request.getMethod();
+
+        return
+                path.equals("/login") ||
+                        (path.equals("/user") && method.equals("POST")) ||
+                        request.getMethod().equals("OPTIONS"); // safety
+    }
 }
